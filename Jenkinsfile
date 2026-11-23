@@ -32,7 +32,7 @@ def gv
         stage('deploy') {
             steps {
                 script {
-                    gv.deployAPP()
+                    gv.deployApp()
                 }
             }
         }
