@@ -1,3 +1,6 @@
+#!/usr/bin/env groovy
+@library('jenkins-shared-library')
+def gv
 pipeline {
     agent any
 
@@ -9,35 +12,30 @@ pipeline {
         stage('init') {
             steps {
                 script {
-                    echo 'Testing the application....'
-                    echo "Executing pipeline for branch $BRANCH_NAME"
+                    gv = load 'script.groovy'
                 }
             }
         }
-        stage('build') {
-            when{
-                expression{
-                    BRANCH_NAME == 'main'
-                }
-            }
+        stage('buildJar') {
             steps {
                 script {
-                    echo "Building the application...."
+                    buildjar()
+                }
+            }
+        }
+        stage('build image') {
+            steps {
+                script {
+                     buildimage()
                 }
             }
         }
         stage('deploy') {
-            when{
-                expression{
-                    BRANCH_NAME == 'main'
-                }
-            }
             steps {
-                script {
-                    echo "Deploying the application...."
+                script { 
+                    gv.deployApp()
                 }
             }
         }
-
     }
 }
