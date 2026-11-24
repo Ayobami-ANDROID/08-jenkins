@@ -23,10 +23,12 @@ pipeline {
                 }
             }
         }
-        stage('build image') {
+        stage('build and push image') {
             steps {
                 script {
                     buildimage 'aydev123/demo-app:jma3.0'
+                    dockerLogin()
+                    dockerPush 'aydev123/demo-app:jma3.0'
                 }
             }
         }
