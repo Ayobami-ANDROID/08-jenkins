@@ -10,7 +10,7 @@ pipeline {
             steps {
                 script {
                     echo 'Testing the application....'
-                    echo "Executing pipeline for branch $BRANCH_NAME"
+                    echo 'Executing pipeline for branch'
                 }
             }
         }
@@ -18,26 +18,23 @@ pipeline {
             steps {
                 script {
                     echo 'Testing the application....'
-                    echo "Executing pipeline for branch $BRANCH_NAME"
+                    echo 'Executing pipeline for branch'
                 }
             }
         }
         stage('build') {
-          
             steps {
                 script {
-                    echo "Building the application...."
+                    echo 'Building the application....'
                 }
             }
         }
         stage('deploy') {
-            
             steps {
                 script {
-                    echo "Deploying the application...."
+                    echo 'Deploying the application....'
                 }
             }
         }
-
     }
 }
