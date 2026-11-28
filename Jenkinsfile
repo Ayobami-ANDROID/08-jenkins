@@ -1,50 +1,30 @@
-pipeline {
+#!/usr/bin.env groovy
+
+pipeline {   
     agent any
-    tools {
-        maven 'maven-3.9'
-    }
     stages {
-        stage('increment version') {
+        stage("test") {
             steps {
                 script {
-                    echo 'incrementing app version...'
-                    sh '''
-                        mvn -B build-helper:parse-version versions:set \
-                            -DnewVersion=\\${parsedVersion.majorVersion}.\\${parsedVersion.minorVersion}.\\${parsedVersion.nextIncrementalVersion} \
-                            versions:commit
-                    '''
-                    def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
-                    def version = matcher[0][1]
-                    env.IMAGE_NAME = "$version-$BUILD_NUMBER"
+                    echo "Testing the application..."
+
                 }
             }
         }
-        stage('build app') {
+        stage("build") {
             steps {
                 script {
-                    echo 'building the application...'
-                    sh 'mvn clean package'
+                    echo "Building the application..."
                 }
             }
         }
-        stage('build image') {
+
+        stage("deploy") {
             steps {
                 script {
-                    echo 'building the docker image...'
-                    withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                        sh "docker build -t aydev123/demo-app:${IMAGE_NAME} ."
-                        sh 'echo $PASS | docker login -u $USER --password-stdin'
-                        sh "docker push aydev123/demo-app:${IMAGE_NAME}"
-                    }
+                    echo "Deploying the application..."
                 }
             }
-        }
-        stage('deploy') {
-            steps {
-                script {
-                    echo 'deploying the application...'
-                }
-            }
-        }
+        }               
     }
-}
+} 
